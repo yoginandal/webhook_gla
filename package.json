@@ -1,0 +1,16 @@
+{
+  "name": "webhook_gla",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm install express axios body-parser"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.10.0",
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0"
+  }
+}

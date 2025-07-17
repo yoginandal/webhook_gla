@@ -1,0 +1,275 @@
+2025-07-14T07:41:09.302Z ✅ 🚀 Webhook server running on http://localhost:3000
+2025-07-14T07:43:57.208Z ✅ Verification attempt received with mode=undefined, token=undefined
+2025-07-14T07:46:19.782Z ✅ 🚀 Webhook server running on http://localhost:3000
+2025-07-14T07:47:12.761Z ✅ Verification attempt received with mode=subscribe, token=GLA_leads_123
+2025-07-14T07:47:12.766Z ✅ Webhook verified successfully
+2025-07-14T07:47:44.699Z ✅ Verification attempt received with mode=subscribe, token=GLA_leads_123
+2025-07-14T07:47:44.704Z ✅ Webhook verified successfully
+2025-07-14T10:54:41.268Z ✅ 🚀 Webhook server running at http://localhost:3000
+2025-07-14T10:54:50.006Z ✅ Verification attempt: mode=undefined, token=undefined
+2025-07-14T11:20:16.936Z ✅ 📥 Incoming payload:
+{
+  "object": "page",
+  "entry": [
+    {
+      "id": "674060612458392",
+      "time": 1710453453,
+      "changes": [
+        {
+          "field": "leadgen",
+          "value": {
+            "ad_id": "1736954290263015",
+            "form_id": "1926549121503840",
+            "leadgen_id": "729017373071612",
+            "created_time": 1710453453,
+            "page_id": "674060612458392"
+          }
+        }
+      ]
+    }
+  ]
+}
+2025-07-14T11:20:16.940Z ✅ 🔔 New lead ID: 729017373071612, Form ID: 1926549121503840
+2025-07-14T11:20:17.745Z ✅ 📋 Lead data:
+{
+  "created_time": "2025-07-14T11:02:58+0000",
+  "id": "729017373071612",
+  "field_data": [
+    {
+      "name": "preferred_program",
+      "values": [
+        "mba"
+      ]
+    },
+    {
+      "name": "full name",
+      "values": [
+        "Stealth Sam Test"
+      ]
+    },
+    {
+      "name": "phone_number",
+      "values": [
+        "+917578744641"
+      ]
+    },
+    {
+      "name": "email",
+      "values": [
+        "testsamstealth@gmail.com"
+      ]
+    },
+    {
+      "name": "date_of_birth",
+      "values": [
+        "06/17/1990"
+      ]
+    },
+    {
+      "name": "city",
+      "values": [
+        "Greater Noida"
+      ]
+    }
+  ]
+}
+2025-07-14T11:32:13.244Z ✅ 🔔 New lead ID: 729017373071612, Form ID: 1926549121503840
+2025-07-14T11:32:13.240Z ✅ 📥 Incoming payload:
+{
+  "object": "page",
+  "entry": [
+    {
+      "id": "674060612458392",
+      "time": 1710453453,
+      "changes": [
+        {
+          "field": "leadgen",
+          "value": {
+            "ad_id": "1736954290263015",
+            "form_id": "1926549121503840",
+            "leadgen_id": "729017373071612",
+            "created_time": 1710453453,
+            "page_id": "674060612458392"
+          }
+        }
+      ]
+    }
+  ]
+}
+2025-07-14T11:32:14.015Z ✅ 📋 Lead data:
+{
+  "created_time": "2025-07-14T11:02:58+0000",
+  "id": "729017373071612",
+  "field_data": [
+    {
+      "name": "preferred_program",
+      "values": [
+        "mba"
+      ]
+    },
+    {
+      "name": "full name",
+      "values": [
+        "Stealth Sam Test"
+      ]
+    },
+    {
+      "name": "phone_number",
+      "values": [
+        "+917578744641"
+      ]
+    },
+    {
+      "name": "email",
+      "values": [
+        "testsamstealth@gmail.com"
+      ]
+    },
+    {
+      "name": "date_of_birth",
+      "values": [
+        "06/17/1990"
+      ]
+    },
+    {
+      "name": "city",
+      "values": [
+        "Greater Noida"
+      ]
+    }
+  ]
+}
+2025-07-14T11:33:56.259Z ✅ 🚀 Webhook server running at http://localhost:3000
+2025-07-14T11:34:35.667Z ✅ 🔔 New lead ID: 729017373071612, Form ID: 1926549121503840
+2025-07-14T11:34:35.665Z ✅ 📥 Incoming payload:
+{
+  "object": "page",
+  "entry": [
+    {
+      "id": "674060612458392",
+      "time": 1710453453,
+      "changes": [
+        {
+          "field": "leadgen",
+          "value": {
+            "ad_id": "1736954290263015",
+            "form_id": "1926549121503840",
+            "leadgen_id": "729017373071612",
+            "created_time": 1710453453,
+            "page_id": "674060612458392"
+          }
+        }
+      ]
+    }
+  ]
+}
+2025-07-14T11:34:36.535Z ✅ 📋 Lead data:
+{
+  "created_time": "2025-07-14T11:02:58+0000",
+  "id": "729017373071612",
+  "field_data": [
+    {
+      "name": "preferred_program",
+      "values": [
+        "mba"
+      ]
+    },
+    {
+      "name": "full name",
+      "values": [
+        "Stealth Sam Test"
+      ]
+    },
+    {
+      "name": "phone_number",
+      "values": [
+        "+917578744641"
+      ]
+    },
+    {
+      "name": "email",
+      "values": [
+        "testsamstealth@gmail.com"
+      ]
+    },
+    {
+      "name": "date_of_birth",
+      "values": [
+        "06/17/1990"
+      ]
+    },
+    {
+      "name": "city",
+      "values": [
+        "Greater Noida"
+      ]
+    }
+  ]
+}
+2025-07-14T11:34:36.536Z ✅ 📤 Sending to CRM: {"Name":"Stealth Sam Test","DOB":"12/7/2000","EmailId":"testsamstealth@gmail.com","Mobile":"+917578744641","ProgramCode":"OGLAMBA201","source":"Stealth","City":"Greater Noida","utm_medium":"","utm_campaign":"","utm_term":"","utm_content":""}
+2025-07-14T11:34:37.520Z ✅ ✅ CRM Response [200]: "Rgistration successful with UserId:GLAO22570965"
+2025-07-15T05:17:10.589Z ✅ 🚀 Webhook server running at http://localhost:3000
+2025-07-15T05:26:02.013Z ✅ Verification attempt: mode=undefined, token=undefined
+2025-07-15T05:32:35.974Z ✅ Verification attempt: mode=subscribe, token=GLA_leads_123
+2025-07-15T05:32:35.974Z ✅ Webhook verified successfully
+2025-07-15T05:33:18.141Z ✅ Verification attempt: mode=subscribe, token=GLA_leads_123
+2025-07-15T05:33:18.142Z ✅ Webhook verified successfully
+2025-07-15T08:02:27.141Z ✅ Verification attempt: mode=undefined, token=undefined
+2025-07-15T08:02:29.080Z ✅ Verification attempt: mode=undefined, token=undefined
+2025-07-15T08:03:22.187Z ✅ 🚀 Webhook server running at http://localhost:3000
+2025-07-15T08:03:31.749Z ✅ Verification attempt: mode=undefined, token=undefined
+2025-07-15T08:03:33.221Z ✅ Verification attempt: mode=undefined, token=undefined
+2025-07-16T05:22:11.088Z ✅ Verification attempt: mode=undefined, token=undefined
+2025-07-16T05:23:21.295Z ✅ 🔔 New lead ID: 444444444444, Form ID: 444444444444
+2025-07-16T05:23:21.293Z ✅ 📥 Incoming payload:
+{
+  "entry": [
+    {
+      "id": "0",
+      "time": 1752643400,
+      "changes": [
+        {
+          "field": "leadgen",
+          "value": {
+            "ad_id": "444444444",
+            "form_id": "444444444444",
+            "leadgen_id": "444444444444",
+            "created_time": 1752643400,
+            "page_id": "444444444444",
+            "adgroup_id": "44444444444"
+          }
+        }
+      ]
+    }
+  ],
+  "object": "page"
+}
+2025-07-16T05:48:01.896Z ✅ Verification attempt: mode=undefined, token=undefined
+2025-07-16T06:29:28.504Z ✅ Verification attempt: mode=subscribe, token=GLA_leads_123
+2025-07-16T06:29:28.505Z ✅ Webhook verified successfully
+2025-07-16T06:30:00.850Z ✅ 📥 Incoming payload:
+{
+  "entry": [
+    {
+      "id": "0",
+      "time": 1752647400,
+      "changes": [
+        {
+          "field": "leadgen",
+          "value": {
+            "ad_id": "444444444",
+            "form_id": "444444444444",
+            "leadgen_id": "444444444444",
+            "created_time": 1752647399,
+            "page_id": "444444444444",
+            "adgroup_id": "44444444444"
+          }
+        }
+      ]
+    }
+  ],
+  "object": "page"
+}
+2025-07-16T06:30:00.854Z ✅ 🔔 New lead ID: 444444444444, Form ID: 444444444444
+2025-07-17T05:08:11.235Z ✅ 🚀 Webhook server running at http://localhost:3000
+2025-07-17T05:13:13.350Z ✅ Verification attempt: mode=undefined, token=undefined
