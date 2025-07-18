@@ -1,9 +1,7 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
-const cron = require("node-cron");
 
 // Load environment variables
 require("dotenv").config();
@@ -150,19 +148,6 @@ function cleanupOldLogs() {
     }
   });
 }
-
-// ✅ Schedule log cleanup daily at 2 AM
-cron.schedule(
-  "0 2 * * *",
-  () => {
-    logSuccess("🧹 Running scheduled log cleanup...");
-    cleanupOldLogs();
-  },
-  {
-    scheduled: true,
-    timezone: "Asia/Kolkata",
-  }
-);
 
 // ✅ Verification endpoint
 app.get("/gla_webhook", (req, res) => {
