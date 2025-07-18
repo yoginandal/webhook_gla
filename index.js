@@ -37,7 +37,7 @@ function logError(message) {
   logToFile("error.log", `❌ ${message}`);
 }
 
-app.get("/webhook", (req, res) => {
+app.get("/gla_webhook", (req, res) => {
   const mode = req.query["hub.mode"];
   const token = req.query["hub.verify_token"];
   const challenge = req.query["hub.challenge"];
@@ -52,7 +52,7 @@ app.get("/webhook", (req, res) => {
   }
 });
 
-app.post("/webhook", async (req, res) => {
+app.post("/gla_webhook", async (req, res) => {
   const body = req.body;
   logSuccess(`📥 Incoming payload:\n${JSON.stringify(body, null, 2)}`);
 
