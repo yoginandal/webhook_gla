@@ -143,6 +143,6 @@ process.on("unhandledRejection", (reason, promise) => {
   logError(`❌ Unhandled Rejection: ${reason}`);
 });
 
-app.listen(3000, () => {
-  logSuccess("🚀 Webhook server running at http://localhost:3000");
+app.listen(3007, () => {
+  logSuccess("🚀 Webhook server running at http://localhost:3007");
 });
