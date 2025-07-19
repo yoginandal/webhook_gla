@@ -201,9 +201,12 @@ app.post("/gla_webhook", async (req, res) => {
             logSuccess(`🔔 New lead ID: ${leadId}, Form ID: ${formId}`);
 
             try {
+              // Get current valid token
+              const currentToken = await getCurrentToken();
+
               const response = await axios.get(
                 `https://graph.facebook.com/v17.0/${leadId}`,
-                { params: { access_token: PAGE_ACCESS_TOKEN } }
+                { params: { access_token: currentToken } }
               );
 
               const leadData = response.data;
@@ -397,6 +400,59 @@ app.get("/debug-webhook", async (req, res) => {
     });
   }
 });
+
+// ✅ Automated token management (works even when users log out)
+const AutomatedTokenManager = require("./automated_token_manager.js");
+
+let tokenManager = null;
+let currentToken = null;
+
+// Initialize automated token manager
+async function initializeTokenManager() {
+  try {
+    tokenManager = new AutomatedTokenManager();
+
+    // Get initial valid token
+    currentToken = await tokenManager.getValidToken();
+
+    if (currentToken && currentToken !== PAGE_ACCESS_TOKEN) {
+      logSuccess(
+        `🔄 Updated to new token: ${currentToken.substring(0, 20)}...`
+      );
+      // Update the global token
+      global.PAGE_ACCESS_TOKEN = currentToken;
+    }
+
+    logSuccess("✅ Automated token manager initialized");
+
+    // Start monitoring
+    await tokenManager.startMonitoring();
+  } catch (error) {
+    logError(`❌ Token manager initialization failed: ${error.message}`);
+  }
+}
+
+// Function to get current valid token
+async function getCurrentToken() {
+  if (tokenManager) {
+    try {
+      const validToken = await tokenManager.getValidToken();
+      if (validToken && validToken !== currentToken) {
+        logSuccess("🔄 Token refreshed automatically");
+        currentToken = validToken;
+        global.PAGE_ACCESS_TOKEN = validToken;
+      }
+      return validToken || currentToken || PAGE_ACCESS_TOKEN;
+    } catch (error) {
+      logError(`❌ Token refresh failed: ${error.message}`);
+      return currentToken || PAGE_ACCESS_TOKEN;
+    }
+  }
+  return PAGE_ACCESS_TOKEN;
+}
+
+// Initialize on startup
+initializeTokenManager();
 
 process.on("uncaughtException", (err) => {
   logError(`❌ Uncaught Exception: ${err.stack}`);
