@@ -12,8 +12,6 @@ package-lock.json
 logs/
 *.log
 
-# Debug files
-debug_webhook.js
 
 # IDE files
 .vscode/

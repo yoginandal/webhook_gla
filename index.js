@@ -171,12 +171,27 @@ app.post("/gla_webhook", async (req, res) => {
     const body = req.body;
     logSuccess(`📥 Incoming payload:\n${JSON.stringify(body, null, 2)}`);
 
+    // Log headers for debugging
+    logSuccess(`📋 Headers: ${JSON.stringify(req.headers, null, 2)}`);
+
     if (body.object === "page") {
+      let processedLeads = 0;
+
       for (const entry of body.entry || []) {
+        logSuccess(`📄 Processing entry: ${entry.id}`);
+
         for (const change of entry.changes || []) {
+          logSuccess(`🔄 Processing change field: ${change.field}`);
+
           if (change.field === "leadgen") {
             const leadId = change.value.leadgen_id;
             const formId = change.value.form_id;
+            const adId = change.value.ad_id;
+            const pageId = change.value.page_id;
+
+            logSuccess(
+              `📊 Lead Details: ID=${leadId}, Form=${formId}, Ad=${adId}, Page=${pageId}`
+            );
 
             if (!leadId || !formId) {
               logError("Missing leadgen_id or form_id in webhook payload");
@@ -236,6 +251,8 @@ app.post("/gla_webhook", async (req, res) => {
                   crmResponse.data
                 )}`
               );
+
+              processedLeads++;
             } catch (err) {
               logError(
                 `❌ Error during lead fetch or CRM push: ${
@@ -243,18 +260,141 @@ app.post("/gla_webhook", async (req, res) => {
                 }`
               );
             }
+          } else {
+            logSuccess(`ℹ️ Ignoring non-leadgen field: ${change.field}`);
           }
         }
       }
 
+      logSuccess(`✅ Processed ${processedLeads} leads successfully`);
       res.status(200).send("EVENT_RECEIVED");
     } else {
-      logError("❌ Unknown object in webhook payload");
+      logError(`❌ Unknown object in webhook payload: ${body.object}`);
       res.sendStatus(404);
     }
   } catch (err) {
     logError(`❌ Error processing webhook payload: ${err.message}`);
     res.sendStatus(500);
+  }
+});
+
+// ✅ Test webhook endpoint for debugging
+app.post("/test-webhook", (req, res) => {
+  try {
+    const body = req.body;
+    logSuccess(`🧪 Test webhook payload:\n${JSON.stringify(body, null, 2)}`);
+
+    // Simulate leadgen webhook
+    const testPayload = {
+      object: "page",
+      entry: [
+        {
+          id: "test_page_id",
+          time: Math.floor(Date.now() / 1000),
+          changes: [
+            {
+              field: "leadgen",
+              value: {
+                ad_id: "test_ad_id",
+                form_id: "test_form_id",
+                leadgen_id: "test_lead_id",
+                created_time: Math.floor(Date.now() / 1000),
+                page_id: "test_page_id",
+              },
+            },
+          ],
+        },
+      ],
+    };
+
+    logSuccess(`🧪 Test payload created for debugging`);
+    res.json({
+      status: "success",
+      message: "Test webhook endpoint working",
+      testPayload: testPayload,
+    });
+  } catch (error) {
+    logError(`❌ Test webhook error: ${error.message}`);
+    res.status(500).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+});
+
+// ✅ Enhanced webhook debugging endpoint
+app.get("/debug-webhook", async (req, res) => {
+  try {
+    const debugInfo = {
+      server: {
+        port: PORT,
+        verifyToken: VERIFY_TOKEN,
+        hasPageToken: !!PAGE_ACCESS_TOKEN,
+        timestamp: new Date().toISOString(),
+      },
+      facebook: {
+        pageId: null,
+        pageName: null,
+        subscriptions: null,
+        forms: null,
+        recentLeads: null,
+      },
+      logs: {
+        successLog: null,
+        errorLog: null,
+        leadFiles: [],
+      },
+    };
+
+    // Check Facebook API
+    if (PAGE_ACCESS_TOKEN) {
+      try {
+        const meResponse = await axios.get(
+          `https://graph.facebook.com/v17.0/me`,
+          { params: { access_token: PAGE_ACCESS_TOKEN } }
+        );
+        debugInfo.facebook.pageId = meResponse.data.id;
+        debugInfo.facebook.pageName = meResponse.data.name;
+      } catch (error) {
+        debugInfo.facebook.error = error.response?.data || error.message;
+      }
+    }
+
+    // Check logs
+    const logsDir = path.join(__dirname, "logs");
+    if (fs.existsSync(logsDir)) {
+      const files = fs.readdirSync(logsDir);
+      debugInfo.logs.leadFiles = files.filter(
+        (f) => f.startsWith("lead-") && f.endsWith(".json")
+      );
+
+      const successLog = path.join(logsDir, "success.log");
+      const errorLog = path.join(logsDir, "error.log");
+
+      if (fs.existsSync(successLog)) {
+        const stats = fs.statSync(successLog);
+        debugInfo.logs.successLog = {
+          exists: true,
+          size: stats.size,
+          modified: stats.mtime,
+        };
+      }
+
+      if (fs.existsSync(errorLog)) {
+        const stats = fs.statSync(errorLog);
+        debugInfo.logs.errorLog = {
+          exists: true,
+          size: stats.size,
+          modified: stats.mtime,
+        };
+      }
+    }
+
+    res.json(debugInfo);
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,
+    });
   }
 });
 
