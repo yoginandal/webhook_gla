@@ -14,6 +14,8 @@ class AutomatedTokenManager {
     this.currentToken = null;
     this.lastRefresh = 0;
     this.refreshInterval = 6 * 60 * 60 * 1000; // 6 hours (more frequent for reliability)
+    this.lastTokenCheck = 0;
+    this.tokenCheckInterval = 30 * 60 * 1000; // Check token every 30 minutes
   }
 
   // Test if token is valid
@@ -146,6 +148,75 @@ class AutomatedTokenManager {
     }
   }
 
+  // 🔥 NEW: Real-time token validation before every API call
+  async getValidTokenForAPI() {
+    const now = Date.now();
+
+    // Check if we need to validate token (every 30 minutes)
+    if (
+      this.currentToken &&
+      now - this.lastTokenCheck < this.tokenCheckInterval
+    ) {
+      // Quick validation check
+      const test = await this.testToken(this.currentToken, "Current");
+      if (test.valid) {
+        return this.currentToken;
+      } else {
+        console.log(
+          "🚨 Token expired during API call! Refreshing immediately..."
+        );
+        // Token expired, refresh immediately
+        return await this.forceRefreshToken();
+      }
+    }
+
+    // Regular refresh cycle
+    return await this.getValidToken();
+  }
+
+  // 🔥 NEW: Force immediate token refresh
+  async forceRefreshToken() {
+    console.log(
+      "🚨 FORCE REFRESH: Token expired, generating new token immediately..."
+    );
+
+    // Always try System User method first (most reliable)
+    let newToken = await this.getPageTokenWithSystemUser();
+
+    // Fallback to App method if System User fails
+    if (!newToken) {
+      console.log("🔄 System User method failed, trying App method...");
+      newToken = await this.getPageTokenWithApp();
+    }
+
+    // Fallback to extending current token
+    if (!newToken && this.pageToken) {
+      console.log("🔄 Trying to extend current token...");
+      newToken = await this.extendToken(this.pageToken);
+    }
+
+    if (newToken) {
+      // Test the new token
+      const test = await this.testToken(newToken, "New");
+      if (test.valid) {
+        this.currentToken = newToken;
+        this.lastRefresh = Date.now();
+        this.lastTokenCheck = Date.now();
+
+        // Update .env file
+        await this.updateEnvFile(newToken);
+
+        console.log(
+          "✅ Fresh page token generated and validated (FORCE REFRESH)"
+        );
+        return newToken;
+      }
+    }
+
+    console.log("❌ Failed to get valid token during force refresh");
+    return this.currentToken || this.pageToken;
+  }
+
   // Main function to get valid token
   async getValidToken() {
     const now = Date.now();
@@ -181,6 +252,7 @@ class AutomatedTokenManager {
       if (test.valid) {
         this.currentToken = newToken;
         this.lastRefresh = now;
+        this.lastTokenCheck = now;
 
         // Update .env file
         await this.updateEnvFile(newToken);
@@ -219,6 +291,12 @@ class AutomatedTokenManager {
     console.log(
       "✅ Using never-expiring System User token for page token generation"
     );
+    console.log(
+      "🛡️ Real-time token validation enabled (checks every 30 minutes)"
+    );
+    console.log(
+      "🚨 Force refresh enabled (immediate refresh on token expiration)"
+    );
 
     // Initial token check
     const validToken = await this.getValidToken();
@@ -235,10 +313,30 @@ class AutomatedTokenManager {
       }
     }, this.refreshInterval);
 
+    // Set up real-time token validation
+    setInterval(async () => {
+      try {
+        if (this.currentToken) {
+          const test = await this.testToken(this.currentToken, "Monitoring");
+          if (!test.valid) {
+            console.log("🚨 Token expired during monitoring! Refreshing...");
+            await this.forceRefreshToken();
+          }
+        }
+      } catch (error) {
+        console.error("❌ Token validation error:", error.message);
+      }
+    }, this.tokenCheckInterval);
+
     console.log(
       `🔄 Token monitoring active (generating fresh tokens every ${
         this.refreshInterval / (60 * 60 * 1000)
       } hours)`
+    );
+    console.log(
+      `🛡️ Real-time validation active (checking every ${
+        this.tokenCheckInterval / (60 * 1000)
+      } minutes)`
     );
   }
 }

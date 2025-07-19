@@ -432,11 +432,12 @@ async function initializeTokenManager() {
   }
 }
 
-// Function to get current valid token
+// Function to get current valid token with real-time validation
 async function getCurrentToken() {
   if (tokenManager) {
     try {
-      const validToken = await tokenManager.getValidToken();
+      // Use real-time validation that checks token before every API call
+      const validToken = await tokenManager.getValidTokenForAPI();
       if (validToken && validToken !== currentToken) {
         logSuccess("🔄 Token refreshed automatically");
         currentToken = validToken;
@@ -445,6 +446,18 @@ async function getCurrentToken() {
       return validToken || currentToken || PAGE_ACCESS_TOKEN;
     } catch (error) {
       logError(`❌ Token refresh failed: ${error.message}`);
+      // If token manager fails, try force refresh
+      try {
+        logSuccess("🚨 Attempting force token refresh...");
+        const forceToken = await tokenManager.forceRefreshToken();
+        if (forceToken) {
+          currentToken = forceToken;
+          global.PAGE_ACCESS_TOKEN = forceToken;
+          return forceToken;
+        }
+      } catch (forceError) {
+        logError(`❌ Force refresh also failed: ${forceError.message}`);
+      }
       return currentToken || PAGE_ACCESS_TOKEN;
     }
   }
